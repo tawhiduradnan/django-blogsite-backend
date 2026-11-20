@@ -1,0 +1,55 @@
+from django.db import models
+from django.contrib.auth.models import User
+# Create your models here.
+
+class TimeStampMixin(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+class Category(TimeStampMixin):
+    category_name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.category_name
+
+
+class Post(TimeStampMixin):
+    STATUS_CHOICES = [
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+    ]
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+
+    category = models.ForeignKey(
+        to=Category, 
+        on_delete=models.CASCADE, 
+        related_name='posts', 
+        null=True , 
+        blank=True)
+    
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='draft')
+    author = models.ForeignKey(to=User, on_delete=models.SET_NULL,related_name='posts', null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.category}-{self.title}'
+
+
+
+class Comment(TimeStampMixin):
+    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name='comments')
+
+    author = models.ForeignKey(to=User, on_delete=models.SET_NULL, related_name='comments', null=True, blank=True)
+
+    parent = models.ForeignKey(to='self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
+    
+    body = models.TextField()
+
+    def __str__(self):
+        return f'{self.post.title}-{self.author.first_name}'
+
+
+
