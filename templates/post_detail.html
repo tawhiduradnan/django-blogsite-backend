@@ -1,13 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Detail</title>
-</head>
-<body>
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.content }}</p>
-    <p>Author: {{ post.author.first_name }} {{ post.author.last_name }}</p>
-</body>
-</html>
+
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} | BlogSpace{% endblock title %}
+
+{% block content %}
+
+<!-- Step 1: Post Details -->
+<div class="post-detail">
+
+    <article class="post-card">
+
+        <div class="post-header">
+            <span class="badge">
+                {{ post.category.category_name|default:"Uncategorized" }}
+            </span>
+
+            <h1>{{ post.title }}</h1>
+
+            <div class="meta">
+                <span>
+                    By
+                    {% if post.author.first_name %}
+                        {{ post.author.first_name }} {{ post.author.last_name }}
+                    {% else %}
+                        {{ post.author.username }}
+                    {% endif %}
+                </span>
+
+                <span>•</span>
+
+                <span>{{ post.created_at|date:"F j, Y" }}</span>
+            </div>
+        </div>
+
+        <div class="post-content">
+            {{ post.content|linebreaks }}
+        </div>
+
+    </article>
+
+
+    <!-- Step 2: Comments Section -->
+    <section class="comments-section">
+
+        <h2>Comments</h2>
+
+        <!-- Comment Form -->
+        {% if user.is_authenticated %}
+
+            <form class="comment-form"
+                  method="POST"
+                  action="{% url 'posts:post_detail' pk=post.pk %}">
+
+                {% csrf_token %}
+
+                {{ comment_form.as_p }}
+
+                <input type="hidden"
+                       name="parent_id"
+                       id="parent_id"
+                       value="">
+
+                <button type="submit">Add Comment</button>
+
+            </form>
+
+        {% else %}
+
+            <p class="login-message">
+                You must be logged in to add a comment.
+                <a href="{% url 'login' %}">Login here</a>
+            </p>
+
+        {% endif %}
+
+
+        <!-- Display Comments -->
+        <div class="comments-list">
+
+            {% for comment in comments %}
+
+                <div class="comment">
+
+                    <div class="comment-header">
+                        <strong>
+                            {% if comment.author.first_name %}
+                                {{ comment.author.first_name }} {{ comment.author.last_name }}
+                            {% else %}
+                                {{ comment.author.username }}
+                            {% endif %}
+                        </strong>
+
+                        <small>
+                            {{ comment.created_at|date:"F j, Y" }}
+                        </small>
+                    </div>
+
+                    <p>{{ comment.body|linebreaks }}</p>
+
+
+                    <!-- Display Replies -->
+                    {% for reply in comment.comments.all %}
+
+                        <div class="reply">
+
+                            <div class="comment-header">
+                                <strong>
+                                    {% if reply.author.first_name %}
+                                        {{ reply.author.first_name }} {{ reply.author.last_name }}
+                                    {% else %}
+                                        {{ reply.author.username }}
+                                    {% endif %}
+                                </strong>
+
+                                <small>
+                                    {{ reply.created_at|date:"F j, Y" }}
+                                </small>
+                            </div>
+
+                            <p>{{ reply.body|linebreaks }}</p>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% empty %}
+
+                <p class="empty-comments">No comments yet. Be the first to comment!</p>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock content %}

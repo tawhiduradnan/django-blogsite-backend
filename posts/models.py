@@ -44,7 +44,7 @@ class Comment(TimeStampMixin):
 
     author = models.ForeignKey(to=User, on_delete=models.SET_NULL, related_name='comments', null=True, blank=True)
 
-    parent = models.ForeignKey(to='self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
+    parent = models.ForeignKey(to='self', on_delete=models.CASCADE, related_name='comments', null=True, blank=True)
     
     body = models.TextField()
 
