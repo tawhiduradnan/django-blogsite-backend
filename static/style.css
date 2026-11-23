@@ -519,3 +519,104 @@ input[type="submit"]:hover {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* Nested comment threads */
+.comments-section {
+    margin-top: 2rem;
+}
+
+.comments-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.comment-card {
+    min-width: 0;
+    padding: 1.15rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+
+.comment-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.comment-header strong {
+    color: var(--text);
+}
+
+.comment-body {
+    margin: 0.45rem 0 0.8rem;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.comment-body p {
+    margin: 0;
+    color: inherit;
+}
+
+.reply-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0.65rem;
+    margin-top: 0.75rem;
+}
+
+.reply-form textarea {
+    flex: 1 1 12rem;
+    min-width: 0;
+    width: auto;
+    min-height: 46px;
+    max-height: 140px;
+    resize: vertical;
+    padding: 0.55rem 0.8rem;
+    border-radius: 8px;
+}
+
+.reply-form button[type="submit"] {
+    flex: 0 0 auto;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+}
+
+.comment-replies {
+    display: grid;
+    gap: 0.85rem;
+    margin: 0.9rem 0 0 1.5rem;
+    padding-left: 1rem;
+    border-left: 3px solid rgba(79, 70, 229, 0.35);
+}
+
+.reply-form ul.errorlist {
+    flex-basis: 100%;
+    margin: 0;
+    color: #b91c1c;
+}
+
+@media (max-width: 600px) {
+    .comment-card {
+        padding: 0.9rem;
+    }
+
+    .comment-replies {
+        margin-left: 0.5rem;
+        padding-left: 0.65rem;
+    }
+
+    .reply-form {
+        gap: 0.45rem;
+    }
+
+    .reply-form button[type="submit"] {
+        padding-inline: 0.75rem;
+    }
+}

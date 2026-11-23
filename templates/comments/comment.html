@@ -1,0 +1,45 @@
+<article class="comment-card">
+    <div class="comment-header">
+        <strong>
+            {% if comment.author %}
+                {% if comment.author.first_name %}
+                    {{ comment.author.first_name }} {{ comment.author.last_name }}
+                {% else %}
+                    {{ comment.author.username }}
+                {% endif %}
+            {% else %}
+                Deleted user
+            {% endif %}
+        </strong>
+        <span>·</span>
+        <time datetime="{{ comment.created_at|date:'c' }}">
+            {{ comment.created_at|date:"M j, Y H:i" }}
+        </time>
+    </div>
+
+    <div class="comment-body">{{ comment.body|linebreaks }}</div>
+
+    {% if user.is_authenticated %}
+        <form class="reply-form" method="POST" action="{% url 'posts:post_detail' pk=post.pk %}">
+            {% csrf_token %}
+            {% if reply_parent_id == comment.pk|stringformat:"s" %}
+                {{ reply_form.body.errors }}
+                {{ reply_form.body }}
+            {% else %}
+                <textarea name="body" rows="1" placeholder="Reply..." required></textarea>
+            {% endif %}
+            <input type="hidden" name="parent_id" value="{{ comment.pk }}">
+            <button type="submit">Reply</button>
+        </form>
+    {% endif %}
+
+    {% with replies=comment.comments.all %}
+        {% if replies %}
+            <div class="comment-replies">
+                {% for reply in replies %}
+                    {% include "comments/comment.html" with comment=reply %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+</article>

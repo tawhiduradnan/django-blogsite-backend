@@ -79,67 +79,7 @@
         <div class="comments-list">
 
             {% for comment in comments %}
-
-                <div class="comment">
-
-                    <div class="comment-header">
-                        <strong>
-                            {% if comment.author.first_name %}
-                                {{ comment.author.first_name }} {{ comment.author.last_name }}
-                            {% else %}
-                                {{ comment.author.username }}
-                            {% endif %}
-                        </strong>
-
-                        <small>
-                            {{ comment.created_at|date:"F j, Y" }}
-                        </small>
-                    </div>
-
-                    <p>{{ comment.body|linebreaks }}</p>
-
-
-                    <!-- Display Replies -->
-                    {% for reply in comment.comments.all %}
-
-                        <div class="reply">
-
-                            <div class="comment-header">
-                                <strong>
-                                    {% if reply.author.first_name %}
-                                        {{ reply.author.first_name }} {{ reply.author.last_name }}
-                                    {% else %}
-                                        {{ reply.author.username }}
-                                    {% endif %}
-                                </strong>
-
-                                <small>
-                                    {{ reply.created_at|date:"F j, Y" }}
-                                </small>
-                            </div>
-
-                            <p>{{ reply.body|linebreaks }}</p>
-
-                        </div>
-
-                    {% endfor %}
-
-                    {% if user.is_authenticated %}
-                        <form class="reply-form"
-                              method="POST"
-                              action="{% url 'posts:post_detail' pk=post.pk %}">
-                            {% csrf_token %}
-                            {% if reply_parent_id == comment.pk|stringformat:"s" %}
-                                {{ reply_form.as_p }}
-                            {% else %}
-                                {{ reply_form.body }}
-                            {% endif %}
-                            <input type="hidden" name="parent_id" value="{{ comment.pk }}">
-                            <button type="submit">Reply</button>
-                        </form>
-                    {% endif %}
-
-                </div>
+                {% include "comments/comment.html" with comment=comment %}
 
             {% empty %}
 
