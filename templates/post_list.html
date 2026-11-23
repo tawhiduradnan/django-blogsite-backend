@@ -1,4 +1,50 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+{% block title %}Post List{% endblock %}
+
+{% block content %}
+    <h1>Post List</h1>
+    <h2><a href="{% url 'posts:post_create' %}">Create Post</a></h2>
+
+    <form method="get" action="{% url 'posts:post_list' %}">
+        <input type="text" name="query" placeholder="Search..." value="{{ query }}">
+        <select name="category">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id|stringformat:"s" == selected_category|stringformat:"s" %}selected{% endif %}>
+                    {{ category.category_name }} ({{ category.post_count }})
+                </option>
+            {% endfor %}
+        </select>
+        <select name="status">
+            <option value="">All Statuses</option>
+            {% for status_value, status_display in status_choices %}
+                <option value="{{ status_value }}" {% if status_value == selected_status %}selected{% endif %}>
+                    {{ status_display }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    {% for post in posts_summary %}
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content|truncatechars:100 }} <a href="{% url 'posts:post_detail' pk=post.pk %}">Read more</a></p>
+    {% empty %}
+        <p>No posts found.</p>
+    {% endfor %}
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,4 +61,4 @@
         
     {% endfor %}
 </body>
-</html>
+</html> {% endcomment %}
