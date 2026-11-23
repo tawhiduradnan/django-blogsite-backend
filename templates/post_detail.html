@@ -124,6 +124,21 @@
 
                     {% endfor %}
 
+                    {% if user.is_authenticated %}
+                        <form class="reply-form"
+                              method="POST"
+                              action="{% url 'posts:post_detail' pk=post.pk %}">
+                            {% csrf_token %}
+                            {% if reply_parent_id == comment.pk|stringformat:"s" %}
+                                {{ reply_form.as_p }}
+                            {% else %}
+                                {{ reply_form.body }}
+                            {% endif %}
+                            <input type="hidden" name="parent_id" value="{{ comment.pk }}">
+                            <button type="submit">Reply</button>
+                        </form>
+                    {% endif %}
+
                 </div>
 
             {% empty %}

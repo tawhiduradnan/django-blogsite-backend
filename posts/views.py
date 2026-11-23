@@ -54,21 +54,27 @@ def post_detail_view(request, pk):
     )
     parent_comments = post.comments.filter(parent__isnull=True).select_related('author')
     comment_form = CommentForm()
+    reply_form = CommentForm()
+    reply_parent_id = ''
     if request.method == 'POST' and request.user.is_authenticated:
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
+        form = CommentForm(request.POST)
+        reply_parent_id = request.POST.get('parent_id', '')
+        if form.is_valid():
+            comment = form.save(commit=False)
             comment.post = post
             comment.author = request.user
-            parent_id = request.POST.get('parent_id')
-            if parent_id:
+            if reply_parent_id:
                 # Replies must belong to this post; never attach a comment to
                 # an unrelated post based on an arbitrary submitted ID.
                 comment.parent = get_object_or_404(
-                    post.comments, pk=parent_id, parent__isnull=True
+                    post.comments, pk=reply_parent_id, parent__isnull=True
                 )
             comment.save()
             return redirect('posts:post_detail', pk=post.pk)
+        if reply_parent_id:
+            reply_form = form
+        else:
+            comment_form = form
 
     return render(
         request,
@@ -77,6 +83,8 @@ def post_detail_view(request, pk):
             'post': post,
             'comments': parent_comments,
             'comment_form': comment_form,
+            'reply_form': reply_form,
+            'reply_parent_id': reply_parent_id,
         },
     )
 
