@@ -1,70 +1,57 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+{% extends 'base.html' %}
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+{% block title %}Register | BlogSpace{% endblock %}
 
-        .register-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            width: 350px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+{% block content %}
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+<div class="auth-page">
 
-        input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
+    <!-- Step 1: Registration heading -->
+    <div class="auth-heading">
+        <div class="auth-icon">🚀</div>
+        <h1>Join <span>BlogSpace.</span></h1>
+        <p>Create your account and start sharing your stories.</p>
+    </div>
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    <!-- Step 2: Registration card -->
+    <div class="auth-card">
 
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
+        <h2>Create Account</h2>
+        <p class="auth-subtitle">Fill in your details to get started.</p>
 
-<body>
+        <!-- Step 3: Display form errors -->
+        {% if form.errors %}
+            <div class="auth-error">
+                Please check your information and correct the errors below.
+            </div>
+        {% endif %}
 
-    <div class="register-container">
-        <h2>Register</h2>
-
-        <form method="post">
+        <!-- Step 4: Registration form -->
+        <form method="POST" class="auth-form">
             {% csrf_token %}
 
             {{ form.as_p }}
 
-            <button type="submit">Register</button>
+            <button type="submit" class="auth-submit">
+                Create Account <span>→</span>
+            </button>
         </form>
+
+        <div class="auth-divider">
+            <span>Already have an account?</span>
+        </div>
+
+        <a href="{% url 'login' %}" class="auth-register">
+            Login to Your Account
+        </a>
+
     </div>
 
-</body>
-</html>
+    <p class="auth-footer">
+        ✨ Your next great story starts here.
+    </p>
 
+</div>
+
+{% endblock %}

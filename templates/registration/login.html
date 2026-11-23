@@ -1,70 +1,55 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+{% extends 'base.html' %}
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+{% block title %}Login | BlogSpace{% endblock %}
 
-        .login-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            width: 350px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+{% block content %}
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+<div class="auth-page">
 
-        input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
+    <!-- Step 1: Login heading -->
+    <div class="auth-heading">
+        <div class="auth-icon">🔐</div>
+        <h1>Welcome <span>Back.</span></h1>
+        <p>Log in to continue sharing your stories.</p>
+    </div>
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    <!-- Step 2: Login card -->
+    <div class="auth-card">
 
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
+        <h2>Sign In</h2>
+        <p class="auth-subtitle">Enter your account details below.</p>
 
-<body>
+        {% if form.errors %}
+            <div class="auth-error">
+                Your username or password is incorrect. Please try again.
+            </div>
+        {% endif %}
 
-    <div class="login-container">
-        <h2>Login</h2>
-
-        <form method="post">
+        <form method="POST" class="auth-form">
             {% csrf_token %}
 
             {{ form.as_p }}
 
-            <button type="submit">Login</button>
+            <button type="submit" class="auth-submit">
+                Login <span>→</span>
+            </button>
         </form>
+
+        <div class="auth-divider">
+            <span>New to BlogSpace?</span>
+        </div>
+
+        <a href="{% url 'register' %}" class="auth-register">
+            Create an Account
+        </a>
+
     </div>
 
-</body>
-</html>
+    <p class="auth-footer">
+        ✨ Welcome to a community of storytellers.
+    </p>
 
+</div>
+
+{% endblock %}

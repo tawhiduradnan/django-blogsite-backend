@@ -1,23 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
 
-    <div class="register-container">
-        <h2>Create Post</h2>
+{% extends 'base.html' %}
+{% load static %}
 
-        <form method="post">
+{% block title %}Create Post | BlogSpace{% endblock %}
+
+{% block content %}
+
+<div class="create-post-page">
+
+    <!-- Step 1: Page heading -->
+    <div class="create-post-heading">
+        <span class="eyebrow">SHARE YOUR IDEAS</span>
+        <h1>Create Something <span>Wonderful.</span></h1>
+        <p>Turn your thoughts into a story worth sharing.</p>
+    </div>
+
+    <!-- Step 2: Post creation form -->
+    <div class="create-post-card">
+
+        <div class="card-top">
+            <div class="card-icon">✍️</div>
+            <div>
+                <h2>New Post</h2>
+                <p>Fill in the details below to publish your post.</p>
+            </div>
+        </div>
+
+        <form method="post" class="create-post-form">
             {% csrf_token %}
 
             {{ form.as_p }}
 
-            <button type="submit">Create</button>
+            <div class="form-actions">
+                <a href="{% url 'posts:post_list' %}" class="cancel-btn">
+                    Cancel
+                </a>
+
+                <button type="submit" class="publish-btn">
+                    <span>Publish Post</span>
+                    <span class="arrow">→</span>
+                </button>
+            </div>
         </form>
+
     </div>
 
-</body>
-</html>
+    <!-- Step 3: Helpful footer -->
+    <p class="create-post-note">
+        ✨ Your voice matters. Share something meaningful.
+    </p>
+
+</div>
+
+{% endblock %}
