@@ -1,0 +1,14 @@
+# Python bytecode and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+myvenv/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local development files
+.DS_Store
+*.log
